@@ -58,8 +58,11 @@ svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-l
 </head>
 <body>
 <div id="app"><main class="empty">A carregar...</main></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.0/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>window.supabase||document.write('<script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"><\/script>')</script>
 <script>
+window.onerror=function(m){var a=document.getElementById('app');if(a)a.innerHTML='<main class="empty">Erro: '+String(m).replace(/</g,'&lt;')+'<br><br>Envia esta mensagem ao Claude.</main>'};
+if(!window.supabase){document.getElementById('app').innerHTML='<main class="empty">Não foi possível carregar a biblioteca. Verifica a internet e tenta de novo.</main>'}
 // ===== CONFIGURAÇÃO (chave pública do Supabase) =====
 var SB_URL='https://fbwcduilnxnmowcnpmky.supabase.co';
 var SB_KEY='sb_publishable_9HBjGJZX9VL5VTr0WY2jKQ_blxafql1';
@@ -129,10 +132,4 @@ if(!/^\d{9}$/.test(tel))ok=err('tel','O telefone deve ter 9 dígitos.');
 if(val('pw').length<6)ok=err('pw','A palavra-passe precisa de 6 caracteres ou mais.');
 if(ok){busy(el,true,'A criar...');sb.auth.signUp({email:val('email'),password:val('pw'),options:{data:{nome:val('nome'),telefone:'258'+tel}}}).then(function(r){
 if(r.error){busy(el,false,'Criar conta');err('email',msgErr(r.error));return}
-if(!r.data.session){busy(el,false,'Criar conta');toast('Conta criada. Confirma o email e entra.');S.tab='login';render();return}
-enter(r.data.user).then(function(){toast('Conta criada')})})}}
-else if(a==='login'){var ok2=true;
-if(!/^\S+@\S+\.\S+$/.test(val('email')))ok2=err('email','Escreve o teu email.');
-if(val('pw').length<6)ok2=err('pw','A palavra-passe precisa de 6 caracteres ou mais.');
-if(ok2){busy(el,true,'A entrar...');sb.auth.signInWithPassword({email:val('email'),password:val('pw')}).then(function(r){
-if(r.error){busy(el,false,'Entrar');err('pw',msgErr(r.
+if(!r.data.session){busy(el,false,'Criar conta');toast('Conta criada. Confirma o email e entra.');S.ta
