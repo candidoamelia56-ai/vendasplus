@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-MZ">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1E1E1E">
+<title>VENDAS PLUS+</title>
+<style>
+:root{--bg:#121212;--bar:#1E1E1E;--line:#2D2D2D;--tx:#E0E0E0;--mu:#9ca3af;--or:#f97316;--or2:#ea580c;--gr:#15803d;--wa:#16a34a;--in:#3a3a3a}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+#app{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+main{flex:1;padding:12px 14px 16px}
+.bar{background:var(--bar);border-bottom:1px solid var(--line);padding:10px 14px;position:sticky;top:0;z-index:5}
+.row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.logo{font-weight:700;color:var(--or);font-size:17px}
+.chip{background:#2D2D2D;color:#fb923c;border:1px solid var(--or2);border-radius:999px;padding:4px 10px;font-size:12px;cursor:pointer}
+.menu{margin-top:8px;background:var(--bg);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.menu div{padding:10px 12px;border-bottom:1px solid var(--line);cursor:pointer;display:flex;justify-content:space-between}
+.on{color:#fb923c}
+.in{width:100%;height:44px;background:var(--bar);border:1px solid var(--in);border-radius:10px;padding:0 12px;outline:none}
+.in:focus,.btn:focus-visible,.chip:focus-visible{outline:2px solid var(--or);outline-offset:1px}
+textarea.in{height:76px;padding:10px 12px;resize:none}
+label{display:block;font-size:12px;color:var(--mu);margin:0 0 4px}
+.f{margin-bottom:12px}.er{color:#f87171;font-size:12px;margin-top:3px}
+.btn{width:100%;height:46px;border:0;border-radius:12px;background:var(--or2);color:#fff;font-weight:600;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+.btn:disabled{opacity:.6;cursor:wait}.btn.wa{background:var(--wa)}.btn.ghost{background:transparent;border:1px solid var(--or2);color:#fb923c}
+.cats{display:flex;gap:6px;overflow-x:auto;margin:10px 0}
+.cat{white-space:nowrap;background:#2D2D2D;color:#d1d5db;border:0;border-radius:999px;padding:6px 12px;cursor:pointer}
+.cat.on{background:var(--or2);color:#fff}
+.ban{border-radius:14px;padding:16px;height:110px;display:flex;flex-direction:column;justify-content:center;border:1px solid}
+.dots{display:flex;justify-content:center;gap:6px;margin:8px 0 12px}
+.dots i{height:6px;width:6px;border-radius:9px;background:#4b5563;cursor:pointer}.dots i.a{width:16px;background:var(--or)}
+h2{font-size:15px;margin:0 0 8px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.card{background:#fff;border-radius:12px;overflow:hidden;cursor:pointer;color:#111827;border:0;text-align:left;padding:0}
+.th{height:84px;background:#e5e7eb;display:flex;align-items:center;justify-content:center;font-size:34px;overflow:hidden}
+.th img{width:100%;height:100%;object-fit:cover}
+.cb{padding:8px 10px 10px}.cn{font-weight:600;font-size:14px}.cp{color:var(--gr);font-weight:700;font-size:17px}.cs{color:#6b7280;font-size:11px;margin-top:3px}
+.nav{position:sticky;bottom:0;background:var(--bar);border-top:1px solid var(--line);display:flex;padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}
+.nav button{flex:1;background:none;border:0;color:var(--mu);font-size:11px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:4px 0}
+.nav button.on{color:var(--or)}
+svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--bar);border-radius:10px;padding:3px;margin:14px 0}
+.tabs button{border:0;background:none;padding:9px;border-radius:8px;color:var(--mu);cursor:pointer}.tabs button.on{background:var(--or2);color:#fff}
+.sheet{background:#fff;color:#111827;border-radius:16px 16px 0 0;margin-top:-14px;padding:16px;position:relative;flex:1}
+.pill{display:inline-block;background:#f3f4f6;color:#374151;border-radius:999px;padding:3px 10px;font-size:12px;margin:0 6px 6px 0}
+.sel{border:1px solid #e5e7eb;border-radius:12px;padding:10px;display:flex;align-items:center;gap:10px}
+.av{width:36px;height:36px;border-radius:50%;background:var(--or2);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+.li{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line);gap:8px}
+.bd{font-size:11px;border-radius:999px;padding:2px 8px;background:#422006;color:#fbbf24}.bd.ok{background:#052e16;color:#4ade80}.bd.no{background:#450a0a;color:#f87171}
+.ph{display:flex;gap:8px;overflow-x:auto}.ph>*{flex:0 0 64px;height:64px;border-radius:10px;overflow:hidden;background:#2a2a2a;border:1px dashed var(--or2);color:#fb923c;display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;margin:0}
+.ph img{width:100%;height:100%;object-fit:cover}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#fff;color:#111827;padding:10px 16px;border-radius:999px;font-weight:600;z-index:20;box-shadow:0 4px 14px rgba(0,0,0,.4);max-width:90%}
+.empty{text-align:center;color:var(--mu);padding:28px 10px}
+</style>
+</head>
+<body>
+<div id="app"><main class="empty">A carregar...</main></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.0/dist/umd/supabase.min.js"></script>
+<script>
+// ===== CONFIGURAÇÃO (chave pública do Supabase) =====
+var SB_URL='https://fbwcduilnxnmowcnpmky.supabase.co';
+var SB_KEY='sb_publishable_9HBjGJZX9VL5VTr0WY2jKQ_blxafql1';
+// =====================================================
+var sb=supabase.createClient(SB_URL,SB_KEY);
+var IC={home:'<path d="M3 11l9-8 9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',search:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>',store:'<path d="M3 9l2-5h14l2 5M4 9v11h16V9M9 20v-6h6v6"/>',plus:'<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>',back:'<path d="M15 5l-7 7 7 7"/>',wa:'<path d="M21 12a9 9 0 0 1-13.5 7.8L3 21l1.3-4.4A9 9 0 1 1 21 12z"/>'};
+function ic(n){return '<svg viewBox="0 0 24 24" aria-hidden="true">'+IC[n]+'</svg>'}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function fmt(n){return Number(n).toLocaleString('pt-PT')}
+var CATS=['Todos','Calçado','Roupa','Telemóveis','Casa'],CIDS=['Maputo','Matola','Beira','Nampula','Outra'],EM={Calçado:'👟',Roupa:'👕',Telemóveis:'📱',Casa:'🏠'};
+var COL=[['#431407','#9a3412','#fb923c'],['#1e1b4b','#3730a3','#a5b4fc'],['#052e16','#166534','#4ade80']];
+var S={user:null,prof:null,mode:'Comprador',scr:'auth',tab:'signup',pid:null,q:'',cat:'Todos',ad:0,open:false,photos:[],form:{},prods:[],mine:[],ban:[]};
+var app=document.getElementById('app');
+function $(id){return document.getElementById(id)}
+function go(s){S.scr=s;S.open=false;render();window.scrollTo(0,0)}
+function toast(m){var t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(function(){t.remove()},2800)}
+function field(id,l,ph,type,val){return '<div class="f"><label for="'+id+'">'+l+'</label><input class="in" id="'+id+'" type="'+(type||'text')+'" placeholder="'+ph+'" value="'+esc(val||'')+'"><div class="er" id="e_'+id+'"></div></div>'}
+function err(id,m){var e=$('e_'+id);if(e)e.textContent=m;return false}
+function val(id){var e=$(id);return e?e.value.trim():''}
+function busy(b,on,t){if(!b)return;b.disabled=on;if(t)b.textContent=t}
+function map(r){var pr=r.profiles||{};return {id:r.id,nome:r.nome,preco:r.preco_mt,cat:r.categoria,cid:r.cidade,desc:r.descricao,imgs:r.imagens||[],vend:pr.nome||'Vendedor',tel:pr.telefone||'',st:r.estado}}
+function card(p){var im=p.imgs[0]?'<img src="'+esc(p.imgs[0])+'" alt="" loading="lazy">':(EM[p.cat]||'🛍️');
+return '<button class="card" data-a="prod" data-v="'+p.id+'"><div class="th">'+im+'</div><div class="cb"><div class="cn">'+esc(p.nome)+'</div><div class="cp">'+fmt(p.preco)+' MT</div><div class="cs">'+esc(p.vend)+' · '+esc(p.cid)+'</div></div></button>'}
+function list(){var q=S.q.toLowerCase();return S.prods.filter(function(p){return (S.cat==='Todos'||p.cat===S.cat)&&(!q||(p.nome+' '+p.cat+' '+p.cid).toLowerCase().indexOf(q)>-1)})}
+function grid(){var l=list();return l.length?l.map(card).join(''):'<div class="empty" style="grid-column:1/-1">Nenhum produto encontrado.</div>'}
+function banner(){if(!S.ban.length)return '';var b=S.ban[S.ad%S.ban.length],c=COL[S.ad%COL.length];return '<div class="ban" style="background:'+c[0]+';border-color:'+c[1]+'"><div style="font-size:11px;color:'+c[2]+'">Publicidade</div><div style="font-size:18px;font-weight:700;color:#fff;margin:3px 0">'+esc(b.titulo)+'</div><div style="color:#d1d5db;font-size:12px">'+esc(b.subtitulo)+'</div></div><div class="dots">'+S.ban.map(function(x,i){return '<i data-a="ad" data-v="'+i+'" class="'+(i===S.ad?'a':'')+'"></i>'}).join('')+'</div>'}
+function head(){return '<div class="bar"><div class="logo">VENDAS PLUS+</div><div class="row" style="margin-top:6px"><span>Olá, '+esc(S.prof.nome.split(' ')[0])+'</span><button class="chip" data-a="menu">Modo: '+S.mode+' ▾</button></div>'+(S.open?'<div class="menu">'+['Comprador','Vendedor'].map(function(m){return '<div data-a="mode" data-v="'+m+'" class="'+(m===S.mode?'on':'')+'"><span>'+m+'</span>'+(m===S.mode?'<span>✓</span>':'')+'</div>'}).join('')+'</div>':'')+'</div>'}
+function nav(){var it=S.mode==='Vendedor'?[['home','Início','home'],['store','Meus produtos','mine'],['plus','Criar','publish'],['user','Perfil','profile']]:[['home','Início','home'],['search','Pesquisar','search'],['user','Perfil','profile']];
+return '<nav class="nav">'+it.map(function(i){return '<button data-a="nav" data-v="'+i[2]+'" class="'+(S.scr===i[2]?'on':'')+'">'+ic(i[0])+i[1]+'</button>'}).join('')+'</nav>'}
+function auth(){var s=S.tab==='signup';
+return '<main style="padding-top:26px"><div style="text-align:center"><div class="logo" style="font-size:24px">VENDAS PLUS+</div><div style="color:var(--mu);font-size:12px;margin-top:2px">Feito em Moçambique, para moçambicanos</div></div><div class="tabs"><button class="'+(s?'on':'')+'" data-a="tab" data-v="signup">Criar conta</button><button class="'+(!s?'on':'')+'" data-a="tab" data-v="login">Entrar</button></div>'
++(s?field('nome','Nome completo','O teu nome')+field('email','Email','nome@email.com','email')+'<div class="f"><label for="tel">Telefone (WhatsApp)</label><div class="row"><div class="in" style="width:70px;display:flex;align-items:center;justify-content:center">+258</div><input class="in" id="tel" type="tel" inputmode="numeric" placeholder="84 000 0000"></div><div class="er" id="e_tel"></div></div>':field('email','Email','nome@email.com','email'))
++field('pw','Palavra-passe','Mínimo 6 caracteres','password')
++'<button class="btn" id="go" data-a="'+(s?'signup':'login')+'">'+(s?'Criar conta':'Entrar')+'</button></main>'}
+function home(){return head()+'<main><input class="in" id="q" placeholder="Pesquisar produtos" value="'+esc(S.q)+'" aria-label="Pesquisar produtos"><div class="cats">'+CATS.map(function(c){return '<button class="cat '+(S.cat===c?'on':'')+'" data-a="cat" data-v="'+c+'">'+c+'</button>'}).join('')+'</div><div id="ban">'+banner()+'</div><h2>Produtos disponíveis</h2><div class="grid" id="grid">'+grid()+'</div></main>'+nav()}
+function prod(){var p=S.prods.concat(S.mine).filter(function(x){return x.id===S.pid})[0];if(!p){return home()}
+var im=p.imgs[0]?'<img src="'+esc(p.imgs[0])+'" alt="">':(EM[p.cat]||'🛍️');
+var msg='Olá! Vi este produto na VENDAS PLUS+ e quero fazer um pedido.\n\n'+p.nome+'\nPreço: '+fmt(p.preco)+' MT\n\nLink: '+location.href;
+return '<div class="bar row"><button class="chip" data-a="home">‹ Voltar</button><span class="logo">VENDAS PLUS+</span><span style="width:60px"></span></div><div class="th" style="height:220px;font-size:72px;background:#2a2a2a">'+im+'</div><div class="sheet"><div style="color:#6b7280;font-size:12px">'+esc(p.cat)+'</div><div style="font-size:19px;font-weight:700;margin:2px 0">'+esc(p.nome)+'</div><div style="font-size:26px;font-weight:700;color:var(--gr);margin-bottom:10px">'+fmt(p.preco)+' MT</div><span class="pill">'+esc(p.cid)+'</span><div style="font-weight:600;margin-top:6px">Descrição</div><p style="color:#4b5563;margin:4px 0 14px">'+esc(p.desc||'Sem descrição.')+'</p><div class="sel"><div class="av">'+esc(p.vend.slice(0,2).toUpperCase())+'</div><div><div style="font-weight:600">'+esc(p.vend)+'</div><div style="color:#6b7280;font-size:12px">'+esc(p.cid)+'</div></div></div></div><div style="background:var(--bar);border-top:1px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));position:sticky;bottom:0"><a class="btn wa" target="_blank" rel="noopener" href="https://wa.me/'+esc(p.tel)+'?text='+encodeURIComponent(msg)+'">'+ic('wa')+'Fazer pedido</a></div>'}
+function profile(){var t=S.prof.telefone||'';return head()+'<main><div class="row" style="justify-content:flex-start;gap:12px"><div class="av" style="width:48px;height:48px">'+esc(S.prof.nome.slice(0,2).toUpperCase())+'</div><div><div style="font-weight:700;font-size:16px">'+esc(S.prof.nome)+'</div><div style="color:var(--mu);font-size:12px">Conta ativa</div></div></div><div style="margin:10px 0 16px"><div class="li"><span style="color:var(--mu)">Email</span><span>'+esc(S.user.email)+'</span></div><div class="li"><span style="color:var(--mu)">Telefone</span><span>+'+esc(t.slice(0,3))+' '+esc(t.slice(3))+'</span></div><div class="li"><span style="color:var(--mu)">Verificação</span><span style="color:var(--mu)">Em breve</span></div></div><h2>Modo de uso</h2><div class="menu" style="margin:0 0 16px">'+['Comprador','Vendedor'].map(function(m){return '<div data-a="mode" data-v="'+m+'" class="'+(m===S.mode?'on':'')+'"><span>'+m+'</span><span>'+(m===S.mode?'●':'○')+'</span></div>'}).join('')+'</div><button class="btn ghost" data-a="logout">Sair</button></main>'+nav()}
+function mine(){return head()+'<main><h2>Meus produtos</h2>'+(S.mine.length?S.mine.map(function(p){var b=p.st==='aprovado'?['ok','Aprovado']:p.st==='rejeitado'?['no','Rejeitado']:['','Em análise'];return '<div class="li" style="align-items:center"><div><div style="font-weight:600">'+esc(p.nome)+'</div><div style="color:var(--mu);font-size:12px">'+fmt(p.preco)+' MT · '+esc(p.cid)+'</div></div><div style="text-align:right"><span class="bd '+b[0]+'">'+b[1]+'</span><div style="margin-top:6px"><button class="chip" data-a="apagar" data-v="'+p.id+'">Apagar</button></div></div></div>'}).join(''):'<div class="empty">Ainda não publicaste nenhum produto.<br><br><button class="btn" data-a="nav" data-v="publish" style="max-width:220px;margin:auto">Publicar produto</button></div>')+'</main>'+nav()}
+function publish(){var f=S.form;
+return head()+'<main><h2>Publicar produto</h2><div class="f"><label>Fotos (até 4)</label><div class="ph">'+S.photos.map(function(u,i){return '<div><img src="'+u.url+'" alt="Foto '+(i+1)+'"></div>'}).join('')+(S.photos.length<4?'<label>+ Foto<input id="file" type="file" accept="image/*" hidden></label>':'')+'</div><div class="er" id="e_ph"></div></div>'
++field('pn','Nome do produto','Ex.: Sapatilhas Nike',null,f.pn)+'<div class="f"><label for="pp">Preço (MT)</label><input class="in" id="pp" inputmode="numeric" placeholder="4500" value="'+esc(f.pp)+'"><div class="er" id="e_pp"></div></div>'
++'<div class="f"><label for="pc">Categoria</label><select class="in" id="pc"><option value="">Escolher categoria</option>'+CATS.slice(1).map(function(c){return '<option'+(f.pc===c?' selected':'')+'>'+c+'</option>'}).join('')+'</select><div class="er" id="e_pc"></div></div>'
++'<div class="f"><label for="pi">Cidade</label><select class="in" id="pi"><option value="">Escolher cidade</option>'+CIDS.map(function(c){return '<option'+(f.pi===c?' selected':'')+'>'+c+'</option>'}).join('')+'</select><div class="er" id="e_pi"></div></div>'
++'<div class="f"><label for="pd">Descrição (opcional)</label><textarea class="in" id="pd" placeholder="Tamanhos, cor, estado, entrega...">'+esc(f.pd)+'</textarea></div><p style="color:var(--mu);font-size:12px">Os pedidos vão para o teu WhatsApp: +'+esc(S.prof.telefone)+'</p><button class="btn" id="pub" data-a="publicar">Publicar produto</button></main>'+nav()}
+function saveForm(){S.form={pn:val('pn'),pp:val('pp'),pc:val('pc'),pi:val('pi'),pd:val('pd')}}
+function render(){if(!S.user&&S.scr!=='auth')S.scr='auth';
+app.innerHTML=S.scr==='auth'?auth():S.scr==='home'?home():S.scr==='prod'?prod():S.scr==='profile'?profile():S.scr==='mine'?mine():publish()}
+// ===== DADOS =====
+function loadProds(){return sb.from('products').select('*, profiles(nome,telefone)').eq('estado','aprovado').order('criado_em',{ascending:false}).then(function(r){S.prods=(r.data||[]).map(map)})}
+function loadMine(){return sb.from('products').select('*, profiles(nome,telefone)').eq('vendedor_id',S.user.id).order('criado_em',{ascending:false}).then(function(r){S.mine=(r.data||[]).map(map)})}
+function loadBan(){return sb.from('banners').select('*').eq('ativo',true).order('ordem').then(function(r){S.ban=r.data||[]})}
+function loadProf(tries){return sb.from('profiles').select('*').eq('id',S.user.id).single().then(function(r){if(r.data){S.prof=r.data;S.mode=r.data.modo==='vendedor'?'Vendedor':'Comprador';return true}
+if(tries>0)return new Promise(function(ok){setTimeout(ok,500)}).then(function(){return loadProf(tries-1)});return false})}
+function enter(user){S.user=user;return loadProf(4).then(function(ok){if(!ok){toast('Não foi possível carregar o teu perfil.');return sb.auth.signOut()}return Promise.all([loadProds(),loadMine(),loadBan()]).then(function(){go('home')})})}
+function compress(file){return new Promise(function(ok,bad){var im=new Image(),u=URL.createObjectURL(file);im.onload=function(){var m=900,r=Math.min(1,m/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*r);c.height=Math.round(im.height*r);c.getContext('2d').drawImage(im,0,0,c.width,c.height);c.toBlob(function(b){URL.revokeObjectURL(u);b?ok(b):bad()},'image/jpeg',0.8)};im.onerror=bad;im.src=u})}
+function msgErr(e){var m=(e&&e.message)||'';if(/already registered/i.test(m))return 'Este email já tem conta. Usa Entrar.';if(/invalid login/i.test(m))return 'Email ou palavra-passe incorretos.';if(/rate limit/i.test(m))return 'Muitas tentativas. Espera um pouco e tenta de novo.';if(/network|fetch/i.test(m))return 'Sem ligação. Verifica a internet.';return 'Algo correu mal. Tenta de novo.'}
+// ===== AÇÕES =====
+function act(a,v,el){
+if(a==='tab'){S.tab=v;render()}
+else if(a==='signup'){var ok=true,tel=val('tel').replace(/\s/g,'');
+if(!val('nome'))ok=err('nome','Escreve o teu nome.');
+if(!/^\S+@\S+\.\S+$/.test(val('email')))ok=err('email','Escreve um email válido.');
+if(!/^\d{9}$/.test(tel))ok=err('tel','O telefone deve ter 9 dígitos.');
+if(val('pw').length<6)ok=err('pw','A palavra-passe precisa de 6 caracteres ou mais.');
+if(ok){busy(el,true,'A criar...');sb.auth.signUp({email:val('email'),password:val('pw'),options:{data:{nome:val('nome'),telefone:'258'+tel}}}).then(function(r){
+if(r.error){busy(el,false,'Criar conta');err('email',msgErr(r.error));return}
+if(!r.data.session){busy(el,false,'Criar conta');toast('Conta criada. Confirma o email e entra.');S.tab='login';render();return}
+enter(r.data.user).then(function(){toast('Conta criada')})})}}
+else if(a==='login'){var ok2=true;
+if(!/^\S+@\S+\.\S+$/.test(val('email')))ok2=err('email','Escreve o teu email.');
+if(val('pw').length<6)ok2=err('pw','A palavra-passe precisa de 6 caracteres ou mais.');
+if(ok2){busy(el,true,'A entrar...');sb.auth.signInWithPassword({email:val('email'),password:val('pw')}).then(function(r){
+if(r.error){busy(el,false,'Entrar');err('pw',msgErr(r.
