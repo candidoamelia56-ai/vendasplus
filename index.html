@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="pt-MZ">
 <head>
 <meta charset="UTF-8">
@@ -132,4 +132,39 @@ if(!/^\d{9}$/.test(tel))ok=err('tel','O telefone deve ter 9 dígitos.');
 if(val('pw').length<6)ok=err('pw','A palavra-passe precisa de 6 caracteres ou mais.');
 if(ok){busy(el,true,'A criar...');sb.auth.signUp({email:val('email'),password:val('pw'),options:{data:{nome:val('nome'),telefone:'258'+tel}}}).then(function(r){
 if(r.error){busy(el,false,'Criar conta');err('email',msgErr(r.error));return}
-if(!r.data.session){busy(el,false,'Criar conta');toast('Conta criada. Confirma o email e entra.');S.ta
+if(!r.data.session){busy(el,false,'Criar conta');toast('Conta criada. Confirma o email e entra.');S.tab='login';render();return}
+enter(r.data.user).then(function(){toast('Conta criada')})})}}
+else if(a==='login'){var ok2=true;
+if(!/^\S+@\S+\.\S+$/.test(val('email')))ok2=err('email','Escreve o teu email.');
+if(val('pw').length<6)ok2=err('pw','A palavra-passe precisa de 6 caracteres ou mais.');
+if(ok2){busy(el,true,'A entrar...');sb.auth.signInWithPassword({email:val('email'),password:val('pw')}).then(function(r){
+if(r.error){busy(el,false,'Entrar');err('pw',msgErr(r.error));return}enter(r.data.user)})}}
+else if(a==='logout'){sb.auth.signOut().then(function(){S.user=null;S.prof=null;S.scr='auth';render()})}
+else if(a==='menu'){S.open=!S.open;render()}
+else if(a==='mode'){var nm=v;S.open=false;sb.from('profiles').update({modo:nm.toLowerCase()}).eq('id',S.user.id).then(function(r){if(r.error){toast('Não foi possível mudar o modo.');return}S.mode=nm;if(nm==='Comprador'&&(S.scr==='mine'||S.scr==='publish'))S.scr='home';render();toast('Modo: '+nm)})}
+else if(a==='nav'){if(v==='search'){go('home');setTimeout(function(){var q=$('q');if(q)q.focus()},50)}else go(v)}
+else if(a==='home'){go('home')}
+else if(a==='cat'){S.cat=v;render()}
+else if(a==='ad'){S.ad=+v;var b=$('ban');if(b)b.innerHTML=banner()}
+else if(a==='prod'){S.pid=v;go('prod')}
+else if(a==='apagar'){if(!confirm('Apagar este produto?'))return;sb.from('products').delete().eq('id',v).then(function(r){if(r.error){toast('Não foi possível apagar.');return}Promise.all([loadMine(),loadProds()]).then(render)})}
+else if(a==='publicar'){saveForm();var f=S.form,ok3=true,pr=parseInt(f.pp.replace(/\D/g,''),10);
+if(S.photos.length<1)ok3=err('ph','Adiciona pelo menos uma foto.');
+if(!f.pn)ok3=err('pn','Escreve o nome do produto.');
+if(!pr||pr<=0)ok3=err('pp','Escreve um preço maior que zero.');
+if(!f.pc)ok3=err('pc','Escolhe uma categoria.');
+if(!f.pi)ok3=err('pi','Escolhe a cidade.');
+if(ok3){busy(el,true,'A enviar fotos...');var ts=Date.now();
+Promise.all(S.photos.map(function(ph,i){var path=S.user.id+'/'+ts+'-'+i+'.jpg';return sb.storage.from('produtos').upload(path,ph.blob,{contentType:'image/jpeg'}).then(function(r){if(r.error)throw r.error;return sb.storage.from('produtos').getPublicUrl(path).data.publicUrl})}))
+.then(function(urls){return sb.from('products').insert({vendedor_id:S.user.id,nome:f.pn,preco_mt:pr,categoria:f.pc,cidade:f.pi,descricao:f.pd,imagens:urls}).then(function(r){if(r.error)throw r.error})})
+.then(function(){S.photos=[];S.form={};return loadMine()}).then(function(){go('mine');toast('Enviado para análise')})
+.catch(function(){busy(el,false,'Publicar produto');toast('Não foi possível publicar. Tenta de novo.')})}}}
+app.addEventListener('click',function(e){var t=e.target.closest('[data-a]');if(t)act(t.getAttribute('data-a'),t.getAttribute('data-v'),t)});
+app.addEventListener('input',function(e){if(e.target.id==='q'){S.q=e.target.value;$('grid').innerHTML=grid()}var er=$('e_'+e.target.id);if(er)er.textContent=''});
+app.addEventListener('change',function(e){if(e.target.id==='file'&&e.target.files[0]){var fl=e.target.files[0];saveForm();compress(fl).then(function(b){S.photos.push({blob:b,url:URL.createObjectURL(b)});render()}).catch(function(){toast('Não foi possível usar esta foto.')})}});
+setInterval(function(){var b=$('ban');if(b&&S.scr==='home'&&S.ban.length>1){S.ad=(S.ad+1)%S.ban.length;b.innerHTML=banner()}},3500);
+// ===== ARRANQUE =====
+Promise.race([sb.auth.getSession(),new Promise(function(ok){setTimeout(function(){ok({timeout:true})},6000)})]).then(function(r){if(r&&r.data&&r.data.session)enter(r.data.session.user);else render()}).catch(function(){render()});
+</script>
+</body>
+</html>
