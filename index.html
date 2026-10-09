@@ -74,7 +74,7 @@ function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){retur
 function fmt(n){return Number(n).toLocaleString('pt-PT')}
 var CATS=['Todos','Calçado','Roupa','Telemóveis','Casa'],CIDS=['Maputo','Matola','Beira','Nampula','Outra'],EM={Calçado:'👟',Roupa:'👕',Telemóveis:'📱',Casa:'🏠'};
 var COL=[['#431407','#9a3412','#fb923c'],['#1e1b4b','#3730a3','#a5b4fc'],['#052e16','#166534','#4ade80']];
-var S={guest:false,user null,prof:null,mode:'Comprador',scr:'auth',tab:'signup',pid:null,q:'',cat:'Todos',ad:0,open:false,photos:[],form:{},prods:[],mine:[],ban:[],pend:[],abn:[],bimg:null,bf:{},pimg:0};
+var S={guest:false,user:null,prof:null,mode:'Comprador',scr:'auth',tab:'signup',pid:null,q:'',cat:'Todos',ad:0,open:false,photos:[],form:{},prods:[],mine:[],ban:[],pend:[],abn:[],bimg:null,bf:{},pimg:0};
 var app=document.getElementById('app');
 function $(id){return document.getElementById(id)}
 function go(s){S.scr=s;S.open=false;render();window.scrollTo(0,0)}
